@@ -37,4 +37,13 @@ public class MainFrameTest {
         window.requireTitle("👻 GhostBusters Asturias - Base de Operaciones");
     }
 
+    @Test
+    void shouldContainAllButtons() {
+        window.requireVisible(); 
+        window.button("captureButton").requireVisible();
+        window.button("listButton").requireVisible();
+        window.button("deleteButton").requireVisible();
+        window.button("exitButton").requireVisible();
+    }
+
 }
