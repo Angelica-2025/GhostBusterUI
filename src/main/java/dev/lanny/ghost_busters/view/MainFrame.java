@@ -6,8 +6,12 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 import javax.swing.*;
+
+import dev.lanny.ghost_busters.controller.HunterController;
+import dev.lanny.ghost_busters.model.HunterModel;
 
 
 
@@ -15,7 +19,7 @@ public class MainFrame extends JFrame {
     private ImageIcon originalIcon;
     private JLabel backgroundLabel;
 
-    public MainFrame() {
+    public MainFrame(HunterController hunterController) {
         setTitle("👻 GhostBusters Asturias - Base de Operaciones");
         setSize(1200, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -100,6 +104,13 @@ public class MainFrame extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new MainFrame());
+        // Crear una instancia de HunterModel
+        HunterModel hunterModel = new HunterModel("Egon Spengler", new ArrayList<>());
+
+        // Pasar la instancia de HunterModel al HunterController
+        HunterController hunterController = new HunterController(hunterModel);
+
+        // Iniciar la UI con el controlador correctamente inicializado
+        SwingUtilities.invokeLater(() -> new MainFrame(hunterController));
     }
 }
