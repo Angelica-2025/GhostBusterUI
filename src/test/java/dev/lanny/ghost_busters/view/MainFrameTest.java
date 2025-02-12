@@ -1,5 +1,6 @@
 package dev.lanny.ghost_busters.view;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.ArrayList;
@@ -54,6 +55,13 @@ public class MainFrameTest {
         // realmente se abre.
         // Por ejemplo:
         // assertTrue(isCaptureWindowOpen());
+    }
+
+    @Test
+    void shouldTriggerExitButtonAction() {
+        window.button("exitButton").click();
+        window.robot().waitForIdle();
+        assertFalse(window.target().isVisible());
     }
 
 }
