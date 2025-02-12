@@ -2,10 +2,10 @@ package dev.lanny.ghost_busters.view;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Image;
 
 import javax.swing.*;
-
 
 public class MainFrame extends JFrame {
     private ImageIcon originalIcon;
@@ -31,6 +31,15 @@ public class MainFrame extends JFrame {
         backgroundLabel.setBounds(0, 0, 1200, 600);
         layeredPane.add(backgroundLabel, JLayeredPane.DEFAULT_LAYER);
 
+        // TÍTULO SUPERIOR
+        JLabel titleLabel = new JLabel("👻 GhostBusters Asturias - Base de Operaciones 👻", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 28));
+        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setOpaque(true);
+        titleLabel.setBackground(Color.BLACK);
+        titleLabel.setBounds(0, 0, 1200, 80);
+        layeredPane.add(titleLabel, JLayeredPane.MODAL_LAYER);
+
         setContentPane(layeredPane);
         setVisible(true);
     }
@@ -39,6 +48,3 @@ public class MainFrame extends JFrame {
         SwingUtilities.invokeLater(() -> new MainFrame());
     }
 }
-
-
-    
