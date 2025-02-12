@@ -2,8 +2,6 @@ package dev.lanny.ghost_busters.view;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.util.Random;
 
@@ -12,190 +10,197 @@ import dev.lanny.ghost_busters.model.GhostModel;
 import dev.lanny.ghost_busters.model.GhostClass;
 import dev.lanny.ghost_busters.model.ThreatLevel;
 
-
 public class CaptureGhostFrame extends JFrame {
-    private JTextField nameField;
+    private JTextField nameField, abilityField, dateField;
     private JComboBox<GhostClass> ghostClassComboBox;
     private JComboBox<ThreatLevel> threatLevelComboBox;
-    private JTextField abilityField;
-    private JTextField dateField;
     private JLabel statusLabel;
-    private HunterController hunterController;
+    private final HunterController hunterController;
 
     public CaptureGhostFrame(HunterController hunterController) {
         this.hunterController = hunterController;
+        setupFrame();
 
-        setTitle("👻 Capturar un Nuevo Fantasma");
-        setSize(600, 400);
-        setLocationRelativeTo(null);
-        setResizable(false);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        JPanel panel = createPanel();
+        GridBagConstraints gbc = setupGridConstraints();
 
-    
-        JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 10, 5, 10);
-        gbc.anchor = GridBagConstraints.WEST; 
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-        panel.setBackground(Color.BLACK);
+        nameField = createTextField("nameField");
+        abilityField = createTextField("abilityField");
+        dateField = createTextField("dateField", LocalDate.now().toString());
+        ghostClassComboBox = createComboBox(GhostClass.values(), "ghostClassComboBox");
+        threatLevelComboBox = createComboBox(ThreatLevel.values(), "threatLevelComboBox");
 
-       
-        nameField = createStyledTextField();
-        abilityField = createStyledTextField();
-        dateField = createStyledTextField();
-        dateField.setText(LocalDate.now().toString());
+        addFormField(panel, "👻 Nombre:", nameField, gbc, 0);
+        addFormField(panel, "👻 Clase:", ghostClassComboBox, gbc, 1);
+        addFormField(panel, "⚠ Peligro:", threatLevelComboBox, gbc, 2);
+        addFormField(panel, "✨ Habilidad:", abilityField, gbc, 3);
+        addFormField(panel, "📅 Fecha (YYYY-MM-DD):", dateField, gbc, 4);
 
-        
-        ghostClassComboBox = createStyledComboBox(GhostClass.values());
-        threatLevelComboBox = createStyledComboBox(ThreatLevel.values());
-
-     
-        gbc.gridx = 0; gbc.gridy = 0;
-        panel.add(createStyledLabel("👻 Nombre del Fantasma:"), gbc);
-        gbc.gridx = 1;
-        panel.add(nameField, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 1;
-        panel.add(createStyledLabel("👻 Clase del Fantasma:"), gbc);
-        gbc.gridx = 1;
-        panel.add(ghostClassComboBox, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 2;
-        panel.add(createStyledLabel("⚠ Nivel de Peligro:"), gbc);
-        gbc.gridx = 1;
-        panel.add(threatLevelComboBox, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 3;
-        panel.add(createStyledLabel("✨ Habilidad Especial:"), gbc);
-        gbc.gridx = 1;
-        panel.add(abilityField, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 4;
-        panel.add(createStyledLabel("📅 Fecha de Captura (YYYY-MM-DD):"), gbc);
-        gbc.gridx = 1;
-        panel.add(dateField, gbc);
-
-      
-        gbc.gridx = 0; gbc.gridy = 5; gbc.gridwidth = 2;
-        JButton captureButton = createStyledButton("📷 Capturar Fantasma");
-        captureButton.addActionListener(new CaptureButtonListener());
-        panel.add(captureButton, gbc);
-
-      
-        gbc.gridy = 6;
-        statusLabel = createStyledLabel("");
-        statusLabel.setForeground(Color.RED);
-        panel.add(statusLabel, gbc);
-
+        setupCaptureButton(panel, gbc);
+        setupStatusLabel(panel, gbc);
         add(panel);
         setVisible(true);
     }
 
-    private class CaptureButtonListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            String name = nameField.getText().trim();
-            GhostClass ghostClass = (GhostClass) ghostClassComboBox.getSelectedItem();
-            ThreatLevel threatLevel = (ThreatLevel) threatLevelComboBox.getSelectedItem();
-            String ability = abilityField.getText().trim();
-            String captureDate = dateField.getText().trim();
+    private void setupFrame() {
+        setTitle("👻 Capturar Fantasma");
+        setSize(600, 350);
+        setLocationRelativeTo(null);
+        setResizable(false);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }
 
-            if (name.isEmpty() || ability.isEmpty()) {
-                statusLabel.setText("❌ Nombre y habilidad no pueden estar vacíos.");
-                return;
-            }
+    private JPanel createPanel() {
+        JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        panel.setBackground(Color.BLACK);
+        return panel;
+    }
 
-            if (!captureDate.matches("\\d{4}-\\d{2}-\\d{2}")) {
-                statusLabel.setText("❌ Fecha inválida. Use formato YYYY-MM-DD.");
-                return;
-            }
+    private GridBagConstraints setupGridConstraints() {
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 10, 5, 10);
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        return gbc;
+    }
 
-            int ectoplasmicAffinity = new Random().nextInt(10) + 1;
+    private void setupCaptureButton(JPanel panel, GridBagConstraints gbc) {
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        gbc.gridwidth = 2;
 
-            try {
-                GhostModel capturedGhost = new GhostModel(name, ghostClass, threatLevel, ability, captureDate);
-                hunterController.captureGhost(capturedGhost);
-                showGhostDetailsDialog(capturedGhost, ectoplasmicAffinity);
-                dispose();
-            } catch (IllegalArgumentException ex) {
-                statusLabel.setText("❌ Error: " + ex.getMessage());
-            }
+        JButton captureButton = createButton("📷 Capturar", "captureButton");
+        captureButton.addActionListener(e -> captureGhost());
+        panel.add(captureButton, gbc);
+    }
+
+    private void setupStatusLabel(JPanel panel, GridBagConstraints gbc) {
+        gbc.gridy = 6;
+        statusLabel = createLabel("", false);
+        statusLabel.setName("statusLabel");
+        panel.add(statusLabel, gbc);
+    }
+
+    private void captureGhost() {
+        String name = nameField.getText().trim();
+        String ability = abilityField.getText().trim();
+        String captureDate = dateField.getText().trim();
+
+        if (name.isEmpty() || ability.isEmpty()) {
+            updateStatusLabel("❌ Nombre y habilidad no pueden estar vacíos.");
+            return;
+        }
+        if (!captureDate.matches("\\d{4}-\\d{2}-\\d{2}")) {
+            updateStatusLabel("❌ Fecha inválida. Use YYYY-MM-DD.");
+            return;
+        }
+
+        try {
+            GhostModel ghost = new GhostModel(name, 
+                (GhostClass) ghostClassComboBox.getSelectedItem(),
+                (ThreatLevel) threatLevelComboBox.getSelectedItem(), 
+                ability, captureDate);
+            
+            hunterController.captureGhost(ghost);
+            updateStatusLabel("✅ ¡Fantasma capturado!");
+
+            showGhostDetailsDialog(ghost, new Random().nextInt(10) + 1);
+            dispose();
+        } catch (IllegalArgumentException ex) {
+            updateStatusLabel("❌ " + ex.getMessage());
         }
     }
 
-    private void showGhostDetailsDialog(GhostModel ghost, int ectoplasmicAffinity) {
+    private void showGhostDetailsDialog(GhostModel ghost, int affinity) {
         JDialog dialog = new JDialog(this, "Fantasma Capturado", true);
-        dialog.setSize(450, 400);
+        dialog.setSize(400, 350);
         dialog.setLocationRelativeTo(this);
         dialog.setResizable(false);
-    
-        JPanel panel = new JPanel(new GridLayout(9, 1));
+
+        JPanel panel = new JPanel(new GridLayout(8, 1));
         panel.setBackground(Color.BLACK);
-    
-        panel.add(createStyledLabel("✅ ¡Fantasma capturado exitosamente!"));
-        panel.add(createStyledLabel("📌 Nombre: " + ghost.getName()));
-        panel.add(createStyledLabel("📌 Clase: " + ghost.getGhostClass()));
-        panel.add(createStyledLabel("📌 Nivel de Peligro: " + ghost.getThreatLevel()));
-        panel.add(createStyledLabel("📌 Habilidad: " + ghost.getSpecialAbility()));
-        panel.add(createStyledLabel("📌 Fecha de Captura: " + ghost.getCaptureDate()));
-        panel.add(createStyledLabel("📌 Afinidad Ectoplásmica: " + ectoplasmicAffinity + "/10"));
-    
-        // 🔹 Botones de acción
+
+        panel.add(createLabel("✅ ¡Fantasma capturado!", true));
+        panel.add(createLabel("📌 Nombre: " + ghost.getName(), false));
+        panel.add(createLabel("📌 Clase: " + ghost.getGhostClass(), true));
+        panel.add(createLabel("📌 Peligro: " + ghost.getThreatLevel(), false));
+        panel.add(createLabel("📌 Habilidad: " + ghost.getSpecialAbility(), true));
+        panel.add(createLabel("📌 Fecha: " + ghost.getCaptureDate(), false));
+        panel.add(createLabel("📌 Afinidad Ectoplásmica: " + affinity + "/10", true));
+
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         buttonPanel.setBackground(Color.BLACK);
-    
-        JButton addAnotherButton = createStyledButton("📜 Añadir Otro Fantasma");
-        addAnotherButton.addActionListener(e -> {
-            dialog.dispose();
-            new CaptureGhostFrame(hunterController); 
-        });
-    
-        JButton menuButton = createStyledButton("🏠 Volver al Menú");
-        menuButton.addActionListener(e -> {
-            dialog.dispose();
-            new MainFrame(hunterController); 
-        });
-    
-        buttonPanel.add(addAnotherButton);
-        buttonPanel.add(menuButton);
+        buttonPanel.add(createDialogButton("➕ Añadir Otro", dialog, () -> new CaptureGhostFrame(hunterController)));
+        buttonPanel.add(createDialogButton("🏠 Menú", dialog, () -> new MainFrame(hunterController)));
+
         panel.add(buttonPanel);
-    
         dialog.add(panel);
         dialog.setVisible(true);
     }
-    private JLabel createStyledLabel(String text) {
+
+    private void addFormField(JPanel panel, String labelText, JComponent field, GridBagConstraints gbc, int row) {
+        gbc.gridx = 0;
+        gbc.gridy = row;
+        panel.add(createLabel(labelText, true), gbc);
+        gbc.gridx = 1;
+        panel.add(field, gbc);
+    }
+
+    private JLabel createLabel(String text, boolean highlight) {
         JLabel label = new JLabel(text);
-        label.setForeground(Color.GREEN);
-        label.setFont(new Font("Arial", Font.BOLD, 16)); 
+        label.setForeground(highlight ? Color.GREEN : Color.WHITE);
+        label.setFont(new Font("Arial", Font.BOLD, 16));
         return label;
     }
 
-    private JTextField createStyledTextField() {
-        JTextField textField = new JTextField(20);
+    private JTextField createTextField(String name) {
+        return createTextField(name, "");
+    }
+
+    private JTextField createTextField(String name, String defaultValue) {
+        JTextField textField = new JTextField(defaultValue, 20);
         textField.setBackground(Color.BLACK);
         textField.setForeground(Color.GREEN);
         textField.setCaretColor(Color.GREEN);
         textField.setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
+        textField.setName(name);
         return textField;
     }
 
-    private <T> JComboBox<T> createStyledComboBox(T[] items) {
+    private <T> JComboBox<T> createComboBox(T[] items, String name) {
         JComboBox<T> comboBox = new JComboBox<>(items);
         comboBox.setBackground(Color.BLACK);
         comboBox.setForeground(Color.GREEN);
         comboBox.setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
+        comboBox.setName(name);
         return comboBox;
     }
 
-    private JButton createStyledButton(String text) {
+    private JButton createButton(String text, String name) {
         JButton button = new JButton(text);
         button.setBackground(new Color(0, 150, 0));
         button.setForeground(Color.WHITE);
-        button.setFont(new Font("Arial", Font.BOLD, 18)); // 🔺 Aumentamos tamaño de fuente
+        button.setFont(new Font("Arial", Font.BOLD, 16));
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
-
+        button.setName(name);
         return button;
     }
+
+    private JButton createDialogButton(String text, JDialog dialog, Runnable action) {
+        JButton button = createButton(text, "");
+        button.addActionListener(e -> {
+            dialog.dispose();
+            action.run();
+        });
+        return button;
+    }
+
+    private void updateStatusLabel(String message) {
+        statusLabel.setText(message);
+        revalidate();
+        repaint();
+    }
 }
+
