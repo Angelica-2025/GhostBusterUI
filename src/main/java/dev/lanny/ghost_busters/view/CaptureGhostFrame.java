@@ -12,6 +12,8 @@ import dev.lanny.ghost_busters.model.GhostModel;
 import dev.lanny.ghost_busters.model.GhostClass;
 import dev.lanny.ghost_busters.model.ThreatLevel;
 
+
+
 public class CaptureGhostFrame extends JFrame {
     private JTextField nameField;
     private JComboBox<GhostClass> ghostClassComboBox;
@@ -24,46 +26,49 @@ public class CaptureGhostFrame extends JFrame {
 
     public CaptureGhostFrame(HunterController hunterController) {
         this.hunterController = hunterController;
-        
+
         setTitle("👻 Capturar un Nuevo Fantasma");
-        setSize(500, 400);
+        setSize(600, 400);
         setLocationRelativeTo(null);
         setResizable(false);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
         
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(7, 2, 10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        panel.setBackground(Color.BLACK);
 
-        // Campos de entrada
-        panel.add(new JLabel("👻 Nombre del Fantasma:"));
-        nameField = new JTextField();
+        
+        nameField = createStyledTextField();
+        abilityField = createStyledTextField();
+        dateField = createStyledTextField();
+        dateField.setText(LocalDate.now().toString());
+
+        
+        ghostClassComboBox = createStyledComboBox(GhostClass.values());
+        threatLevelComboBox = createStyledComboBox(ThreatLevel.values());
+
+        
+        panel.add(createStyledLabel("👻 Nombre del Fantasma:"));
         panel.add(nameField);
-
-        panel.add(new JLabel("👻 Clase del Fantasma:"));
-        ghostClassComboBox = new JComboBox<>(GhostClass.values());
+        panel.add(createStyledLabel("👻 Clase del Fantasma:"));
         panel.add(ghostClassComboBox);
-
-        panel.add(new JLabel("⚠ Nivel de Peligro:"));
-        threatLevelComboBox = new JComboBox<>(ThreatLevel.values());
+        panel.add(createStyledLabel("⚠ Nivel de Peligro:"));
         panel.add(threatLevelComboBox);
-
-        panel.add(new JLabel("✨ Habilidad Especial:"));
-        abilityField = new JTextField();
+        panel.add(createStyledLabel("✨ Habilidad Especial:"));
         panel.add(abilityField);
-
-        panel.add(new JLabel("📅 Fecha de Captura (YYYY-MM-DD):"));
-        dateField = new JTextField(LocalDate.now().toString());
+        panel.add(createStyledLabel("📅 Fecha de Captura (YYYY-MM-DD):"));
         panel.add(dateField);
 
-        // Botón de captura
-        JButton captureButton = new JButton("📷 Capturar Fantasma");
+        
+        JButton captureButton = createStyledButton("📷 Capturar Fantasma");
         captureButton.addActionListener(new CaptureButtonListener());
         panel.add(captureButton);
 
-        // Etiqueta de estado
-        statusLabel = new JLabel("");
-        statusLabel.setForeground(Color.RED);
+       
+        statusLabel = createStyledLabel("");
+        statusLabel.setForeground(Color.RED); 
         panel.add(statusLabel);
 
         add(panel);
@@ -108,5 +113,57 @@ public class CaptureGhostFrame extends JFrame {
                 statusLabel.setText("❌ Error: " + ex.getMessage());
             }
         }
+    }
+
+   
+    private JLabel createStyledLabel(String text) {
+        JLabel label = new JLabel(text);
+        label.setForeground(Color.GREEN);
+        return label;
+    }
+
+   
+    private JTextField createStyledTextField() {
+        JTextField textField = new JTextField();
+        textField.setBackground(Color.BLACK);
+        textField.setForeground(Color.GREEN);
+        textField.setCaretColor(Color.GREEN);
+        textField.setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
+        return textField;
+    }
+
+    
+    private <T> JComboBox<T> createStyledComboBox(T[] items) {
+        JComboBox<T> comboBox = new JComboBox<>(items);
+        comboBox.setBackground(Color.BLACK);
+        comboBox.setForeground(Color.GREEN);
+        comboBox.setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
+        return comboBox;
+    }
+
+    
+    private JButton createStyledButton(String text) {
+        JButton button = new JButton(text);
+        button.setBackground(Color.BLACK);
+        button.setForeground(Color.GREEN);
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
+
+        
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button.setForeground(Color.BLACK);
+                button.setBackground(Color.GREEN);
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button.setForeground(Color.GREEN);
+                button.setBackground(Color.BLACK);
+            }
+        });
+
+        return button;
     }
 }
