@@ -40,6 +40,30 @@ public class MainFrame extends JFrame {
         titleLabel.setBounds(0, 0, 1200, 80);
         layeredPane.add(titleLabel, JLayeredPane.MODAL_LAYER);
 
+        // Panel de botones
+        JPanel buttonPanel = new JPanel(null);
+        buttonPanel.setOpaque(false);
+        buttonPanel.setBounds(0, 0, 1200, 600);
+
+        // Crear y agregar botones
+        JButton captureButton = createStyledButton("📷 Capturar Fantasma", 450, 200);
+        JButton listButton = createStyledButton("📜 Ver Lista de Fantasmas", 450, 270);
+        JButton deleteButton = createStyledButton("🔍 Eliminar Fantasmas", 450, 340);
+        JButton exitButton = createStyledButton("🚪 Salir", 450, 410);
+
+        buttonPanel.add(captureButton);
+        buttonPanel.add(listButton);
+        buttonPanel.add(deleteButton);
+        buttonPanel.add(exitButton);
+
+        // Acciones de Botones
+        captureButton.addActionListener(e -> new CaptureGhostFrame());
+        listButton.addActionListener(e -> System.out.println("Abrir lista de fantasmas"));
+        deleteButton.addActionListener(e -> System.out.println("Abrir filtro de fantasmas"));
+        exitButton.addActionListener(e -> System.exit(0));
+
+        layeredPane.add(buttonPanel, JLayeredPane.PALETTE_LAYER);
+
         setContentPane(layeredPane);
         setVisible(true);
     }
