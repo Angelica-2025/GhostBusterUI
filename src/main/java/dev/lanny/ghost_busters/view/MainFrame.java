@@ -2,11 +2,14 @@ package dev.lanny.ghost_busters.view;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Image;
 
 import javax.swing.*;
 
 
 public class MainFrame extends JFrame {
+    private ImageIcon originalIcon;
+    private JLabel backgroundLabel;
 
     public MainFrame() {
         setTitle("👻 GhostBusters Asturias - Base de Operaciones");
@@ -15,15 +18,20 @@ public class MainFrame extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
 
-        // Usar JLayeredPane para manejar capas
         JLayeredPane layeredPane = new JLayeredPane();
         layeredPane.setPreferredSize(new Dimension(1200, 600));
         layeredPane.setBackground(Color.BLACK);
-        layeredPane.setOpaque(true); // Asegurar que el fondo negro se muestre
+        layeredPane.setOpaque(true);
 
-        // Agregar layeredPane al JFrame
+        // Cargar y escalar imagen de fondo
+        originalIcon = new ImageIcon("src/main/resources/background.png");
+        Image backgroundImage = originalIcon.getImage().getScaledInstance(1200, 600, Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(backgroundImage);
+        backgroundLabel = new JLabel(scaledIcon);
+        backgroundLabel.setBounds(0, 0, 1200, 600);
+        layeredPane.add(backgroundLabel, JLayeredPane.DEFAULT_LAYER);
+
         setContentPane(layeredPane);
-
         setVisible(true);
     }
 
