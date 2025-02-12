@@ -17,6 +17,7 @@ import dev.lanny.ghost_busters.model.HunterModel;
 public class MainFrame extends JFrame {
     private static final int WIDTH = 1200;
     private static final int HEIGHT = 600;
+    private HunterController hunterController;
 
     private JLabel backgroundLabel;
 
@@ -67,8 +68,7 @@ public class MainFrame extends JFrame {
         buttonPanel.setOpaque(false);
         buttonPanel.setBounds(0, 0, WIDTH, HEIGHT);
 
-        JButton captureButton = createStyledButton("📷 Capturar Fantasma", 450, 200, () -> new CaptureGhostFrame());
-        captureButton.setName("captureButton");
+        JButton captureButton = createStyledButton("📷 Capturar Fantasma", 450, 200, () -> new CaptureGhostFrame(this.hunterController));        captureButton.setName("captureButton");
 
         JButton listButton = createStyledButton("📜 Ver Lista de Fantasmas", 450, 270, this::showGhostList);
         listButton.setName("listButton");
