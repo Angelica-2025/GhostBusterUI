@@ -13,70 +13,72 @@ import javax.swing.*;
 import dev.lanny.ghost_busters.controller.HunterController;
 import dev.lanny.ghost_busters.model.HunterModel;
 
-
-
 public class MainFrame extends JFrame {
-    private ImageIcon originalIcon;
+    private static final int WIDTH = 1200;
+    private static final int HEIGHT = 600;
+
     private JLabel backgroundLabel;
 
     public MainFrame(HunterController hunterController) {
         setTitle("👻 GhostBusters Asturias - Base de Operaciones");
-        setSize(1200, 600);
+        setSize(WIDTH, HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
 
         JLayeredPane layeredPane = new JLayeredPane();
-        layeredPane.setPreferredSize(new Dimension(1200, 600));
-        layeredPane.setBackground(Color.BLACK);
+        layeredPane.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         layeredPane.setOpaque(true);
+        layeredPane.setBackground(Color.BLACK);
 
-        // Cargar y escalar imagen de fondo
-        originalIcon = new ImageIcon("src/main/resources/background.png");
-        Image backgroundImage = originalIcon.getImage().getScaledInstance(1200, 600, Image.SCALE_SMOOTH);
-        ImageIcon scaledIcon = new ImageIcon(backgroundImage);
-        backgroundLabel = new JLabel(scaledIcon);
-        backgroundLabel.setBounds(0, 0, 1200, 600);
-        layeredPane.add(backgroundLabel, JLayeredPane.DEFAULT_LAYER);
+        setupBackground(layeredPane);
 
-        // TÍTULO SUPERIOR
         JLabel titleLabel = new JLabel("👻 GhostBusters Asturias - Base de Operaciones 👻", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 28));
         titleLabel.setForeground(Color.WHITE);
         titleLabel.setOpaque(true);
         titleLabel.setBackground(Color.BLACK);
-        titleLabel.setBounds(0, 0, 1200, 80);
+        titleLabel.setBounds(0, 0, WIDTH, 80);
         layeredPane.add(titleLabel, JLayeredPane.MODAL_LAYER);
 
-        // Panel de botones
-        JPanel buttonPanel = new JPanel(null);
-        buttonPanel.setOpaque(false);
-        buttonPanel.setBounds(0, 0, 1200, 600);
-
-        // Crear y agregar botones
-        JButton captureButton = createStyledButton("📷 Capturar Fantasma", 450, 200);
-        JButton listButton = createStyledButton("📜 Ver Lista de Fantasmas", 450, 270);
-        JButton deleteButton = createStyledButton("🔍 Eliminar Fantasmas", 450, 340);
-        JButton exitButton = createStyledButton("🚪 Salir", 450, 410);
-
-        buttonPanel.add(captureButton);
-        buttonPanel.add(listButton);
-        buttonPanel.add(deleteButton);
-        buttonPanel.add(exitButton);
-
-        // Acciones de Botones
-        captureButton.addActionListener(e -> new CaptureGhostFrame());
-        listButton.addActionListener(e -> System.out.println("Abrir lista de fantasmas"));
-        deleteButton.addActionListener(e -> System.out.println("Abrir filtro de fantasmas"));
-        exitButton.addActionListener(e -> System.exit(0));
-
+        JPanel buttonPanel = createButtonPanel();
         layeredPane.add(buttonPanel, JLayeredPane.PALETTE_LAYER);
 
         setContentPane(layeredPane);
         setVisible(true);
     }
 
-    private JButton createStyledButton(String text, int x, int y) {
+    private void setupBackground(JLayeredPane layeredPane) {
+        ImageIcon backgroundIcon = loadImage("background.png");
+        if (backgroundIcon != null) {
+            Image backgroundImage = backgroundIcon.getImage().getScaledInstance(WIDTH, HEIGHT, Image.SCALE_SMOOTH);
+            backgroundLabel = new JLabel(new ImageIcon(backgroundImage));
+            backgroundLabel.setBounds(0, 0, WIDTH, HEIGHT);
+            layeredPane.add(backgroundLabel, JLayeredPane.DEFAULT_LAYER);
+        } else {
+            System.err.println("No se pudo cargar la imagen de fondo.");
+        }
+    }
+
+    private JPanel createButtonPanel() {
+        JPanel buttonPanel = new JPanel(null);
+        buttonPanel.setOpaque(false);
+        buttonPanel.setBounds(0, 0, WIDTH, HEIGHT);
+
+        JButton captureButton = createStyledButton("📷 Capturar Fantasma", 450, 200, () -> new CaptureGhostFrame());
+        JButton listButton = createStyledButton("📜 Ver Lista de Fantasmas", 450, 270, () -> showGhostList());
+        JButton deleteButton = createStyledButton("🔍 Eliminar Fantasmas", 450, 340, () -> showDeleteGhosts());
+        JButton exitButton = createStyledButton("🚪 Salir", 450, 410, () -> System.exit(0));
+
+        buttonPanel.add(captureButton);
+        buttonPanel.add(listButton);
+        buttonPanel.add(deleteButton);
+        buttonPanel.add(exitButton);
+
+        return buttonPanel;
+    }
+
+    private JButton createStyledButton(String text, int x, int y, Runnable action) {
         JButton button = new JButton(text);
         button.setBounds(x, y, 300, 50);
         button.setFont(new Font("Arial", Font.BOLD, 16));
@@ -85,10 +87,11 @@ public class MainFrame extends JFrame {
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
 
-        // Efecto Hover (cambia color al pasar el ratón)
+        button.addActionListener(e -> action.run());
+
         button.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseEntered(MouseEvent e) { 
+            public void mouseEntered(MouseEvent e) {
                 button.setForeground(Color.BLACK);
                 button.setBackground(Color.GREEN);
             }
@@ -103,14 +106,29 @@ public class MainFrame extends JFrame {
         return button;
     }
 
-    public static void main(String[] args) {
-        // Crear una instancia de HunterModel
-        HunterModel hunterModel = new HunterModel("Egon Spengler", new ArrayList<>());
+    private void showGhostList() {
+        JOptionPane.showMessageDialog(this, "Aquí se mostrará la lista de fantasmas.", "Lista de Fantasmas",
+                JOptionPane.INFORMATION_MESSAGE);
+    }
 
-        // Pasar la instancia de HunterModel al HunterController
+    private void showDeleteGhosts() {
+        JOptionPane.showMessageDialog(this, "Aquí se gestionará la eliminación de fantasmas.", "Eliminar Fantasmas",
+                JOptionPane.WARNING_MESSAGE);
+    }
+
+    private ImageIcon loadImage(String filename) {
+        try {
+            return new ImageIcon(getClass().getClassLoader().getResource(filename));
+        } catch (Exception e) {
+            System.err.println("Error al cargar la imagen: " + filename);
+            return null;
+        }
+    }
+
+    public static void main(String[] args) {
+        HunterModel hunterModel = new HunterModel("Egon Spengler", new ArrayList<>());
         HunterController hunterController = new HunterController(hunterModel);
 
-        // Iniciar la UI con el controlador correctamente inicializado
         SwingUtilities.invokeLater(() -> new MainFrame(hunterController));
     }
 }
