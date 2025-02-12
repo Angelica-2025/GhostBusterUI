@@ -4,8 +4,12 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.*;
+
+
 
 public class MainFrame extends JFrame {
     private ImageIcon originalIcon;
@@ -66,6 +70,33 @@ public class MainFrame extends JFrame {
 
         setContentPane(layeredPane);
         setVisible(true);
+    }
+
+    private JButton createStyledButton(String text, int x, int y) {
+        JButton button = new JButton(text);
+        button.setBounds(x, y, 300, 50);
+        button.setFont(new Font("Arial", Font.BOLD, 16));
+        button.setBackground(Color.BLACK);
+        button.setForeground(Color.GREEN);
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
+
+        // Efecto Hover (cambia color al pasar el ratón)
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) { 
+                button.setForeground(Color.BLACK);
+                button.setBackground(Color.GREEN);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                button.setForeground(Color.GREEN);
+                button.setBackground(Color.BLACK);
+            }
+        });
+
+        return button;
     }
 
     public static void main(String[] args) {
