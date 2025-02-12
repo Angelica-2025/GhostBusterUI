@@ -25,31 +25,35 @@ public class CaptureGhostFrame extends JFrame {
     private HunterController hunterController;
 
     public CaptureGhostFrame(HunterController hunterController) {
+        if (hunterController == null) {
+            throw new IllegalArgumentException("❌ ERROR: hunterController no puede ser NULL en CaptureGhostFrame");
+        }
+    
         this.hunterController = hunterController;
 
         setTitle("👻 Capturar un Nuevo Fantasma");
-        setSize(600, 400);
+        setSize(500, 400);
         setLocationRelativeTo(null);
         setResizable(false);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        
+        // Establecer fondo negro y bordes verdes
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(7, 2, 10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         panel.setBackground(Color.BLACK);
 
-        
+        // Crear campos con estilo
         nameField = createStyledTextField();
         abilityField = createStyledTextField();
         dateField = createStyledTextField();
         dateField.setText(LocalDate.now().toString());
 
-        
+        // Crear JComboBox con estilo
         ghostClassComboBox = createStyledComboBox(GhostClass.values());
         threatLevelComboBox = createStyledComboBox(ThreatLevel.values());
 
-        
+        // Etiquetas de color verde
         panel.add(createStyledLabel("👻 Nombre del Fantasma:"));
         panel.add(nameField);
         panel.add(createStyledLabel("👻 Clase del Fantasma:"));
@@ -61,14 +65,14 @@ public class CaptureGhostFrame extends JFrame {
         panel.add(createStyledLabel("📅 Fecha de Captura (YYYY-MM-DD):"));
         panel.add(dateField);
 
-        
+        // Botón de captura con estilo
         JButton captureButton = createStyledButton("📷 Capturar Fantasma");
         captureButton.addActionListener(new CaptureButtonListener());
         panel.add(captureButton);
 
-       
+        // Etiqueta de estado (errores)
         statusLabel = createStyledLabel("");
-        statusLabel.setForeground(Color.RED); 
+        statusLabel.setForeground(Color.RED); // Los errores se mostrarán en rojo
         panel.add(statusLabel);
 
         add(panel);
@@ -94,35 +98,64 @@ public class CaptureGhostFrame extends JFrame {
                 return;
             }
 
-            int ectoplasmicAffinity = new Random().nextInt(10) + 1;
+          //  int ectoplasmicAffinity = new Random().nextInt(10) + 1;
 
             try {
                 GhostModel capturedGhost = new GhostModel(name, ghostClass, threatLevel, ability, captureDate);
                 hunterController.captureGhost(capturedGhost);
-                JOptionPane.showMessageDialog(CaptureGhostFrame.this,
-                        "✅ ¡Fantasma capturado exitosamente!\n\n" +
-                        "📌 Nombre: " + capturedGhost.getName() + "\n" +
-                        "📌 Clase: " + capturedGhost.getGhostClass() + "\n" +
-                        "📌 Nivel de Peligro: " + capturedGhost.getThreatLevel() + "\n" +
-                        "📌 Habilidad: " + capturedGhost.getSpecialAbility() + "\n" +
-                        "📌 Fecha de Captura: " + capturedGhost.getCaptureDate() + "\n" +
-                        "📌 Afinidad Ectoplásmica: " + ectoplasmicAffinity + "/10",
-                        "Fantasma Capturado", JOptionPane.INFORMATION_MESSAGE);
-                dispose(); // Cierra la ventana después de capturar el fantasma
+                
+                int ectoplasmicAffinity = new Random().nextInt(10) + 1;
+            
+                // Mostrar el cuadro de diálogo antes de cerrar la ventana
+                showGhostDetailsDialog(capturedGhost, ectoplasmicAffinity);
+            
+                // Ahora cerramos la ventana después de que el usuario cierre el cuadro de diálogo
+                dispose();
             } catch (IllegalArgumentException ex) {
                 statusLabel.setText("❌ Error: " + ex.getMessage());
             }
         }
     }
 
-   
+    // 🟢 Método para mostrar una ventana emergente con los detalles del fantasma
+    private void showGhostDetailsDialog(GhostModel ghost, int ectoplasmicAffinity) {
+        System.out.println("🟢 showGhostDetailsDialog() fue llamado correctamente.");
+    
+        SwingUtilities.invokeLater(() -> {
+            System.out.println("🟢 Creando el JDialog...");
+    
+            JDialog dialog = new JDialog(this, "Fantasma Capturado", true);
+            dialog.setSize(350, 250);
+            dialog.setLocationRelativeTo(this);
+            dialog.setResizable(false);
+            
+            JPanel panel = new JPanel();
+            panel.setLayout(new GridLayout(7, 1));
+            panel.setBackground(Color.BLACK);
+            
+            panel.add(createStyledLabel("✅ ¡Fantasma capturado exitosamente!"));
+            panel.add(createStyledLabel("📌 Nombre: " + ghost.getName()));
+            panel.add(createStyledLabel("📌 Clase: " + ghost.getGhostClass()));
+            panel.add(createStyledLabel("📌 Nivel de Peligro: " + ghost.getThreatLevel()));
+            panel.add(createStyledLabel("📌 Habilidad: " + ghost.getSpecialAbility()));
+            panel.add(createStyledLabel("📌 Fecha de Captura: " + ghost.getCaptureDate()));
+            panel.add(createStyledLabel("📌 Afinidad Ectoplásmica: " + ectoplasmicAffinity + "/10"));
+    
+            dialog.add(panel);
+            dialog.setVisible(true);
+            
+            System.out.println("🟢 JDialog debería estar visible ahora.");
+        });
+    }
+    
+
+    // 🟢 Métodos de estilo
     private JLabel createStyledLabel(String text) {
         JLabel label = new JLabel(text);
         label.setForeground(Color.GREEN);
         return label;
     }
 
-   
     private JTextField createStyledTextField() {
         JTextField textField = new JTextField();
         textField.setBackground(Color.BLACK);
@@ -132,7 +165,6 @@ public class CaptureGhostFrame extends JFrame {
         return textField;
     }
 
-    
     private <T> JComboBox<T> createStyledComboBox(T[] items) {
         JComboBox<T> comboBox = new JComboBox<>(items);
         comboBox.setBackground(Color.BLACK);
@@ -141,7 +173,6 @@ public class CaptureGhostFrame extends JFrame {
         return comboBox;
     }
 
-    
     private JButton createStyledButton(String text) {
         JButton button = new JButton(text);
         button.setBackground(Color.BLACK);
@@ -149,7 +180,6 @@ public class CaptureGhostFrame extends JFrame {
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
 
-        
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
