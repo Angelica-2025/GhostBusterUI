@@ -20,55 +20,73 @@ public class CaptureGhostFrame extends JFrame {
     private JTextField abilityField;
     private JTextField dateField;
     private JLabel statusLabel;
-    
     private HunterController hunterController;
 
     public CaptureGhostFrame(HunterController hunterController) {
         this.hunterController = hunterController;
 
         setTitle("👻 Capturar un Nuevo Fantasma");
-        setSize(500, 400);
+        setSize(600, 400);
         setLocationRelativeTo(null);
         setResizable(false);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        // Panel con fondo negro y bordes verdes
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(7, 2, 10, 10));
+    
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 10, 5, 10);
+        gbc.anchor = GridBagConstraints.WEST; 
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         panel.setBackground(Color.BLACK);
 
-        // Crear campos con estilo
+       
         nameField = createStyledTextField();
         abilityField = createStyledTextField();
         dateField = createStyledTextField();
         dateField.setText(LocalDate.now().toString());
 
-        // Crear JComboBox con estilo
+        
         ghostClassComboBox = createStyledComboBox(GhostClass.values());
         threatLevelComboBox = createStyledComboBox(ThreatLevel.values());
 
-        // Etiquetas en verde
-        panel.add(createStyledLabel("👻 Nombre del Fantasma:"));
-        panel.add(nameField);
-        panel.add(createStyledLabel("👻 Clase del Fantasma:"));
-        panel.add(ghostClassComboBox);
-        panel.add(createStyledLabel("⚠ Nivel de Peligro:"));
-        panel.add(threatLevelComboBox);
-        panel.add(createStyledLabel("✨ Habilidad Especial:"));
-        panel.add(abilityField);
-        panel.add(createStyledLabel("📅 Fecha de Captura (YYYY-MM-DD):"));
-        panel.add(dateField);
+     
+        gbc.gridx = 0; gbc.gridy = 0;
+        panel.add(createStyledLabel("👻 Nombre del Fantasma:"), gbc);
+        gbc.gridx = 1;
+        panel.add(nameField, gbc);
 
-        // Botón de captura con estilo
+        gbc.gridx = 0; gbc.gridy = 1;
+        panel.add(createStyledLabel("👻 Clase del Fantasma:"), gbc);
+        gbc.gridx = 1;
+        panel.add(ghostClassComboBox, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 2;
+        panel.add(createStyledLabel("⚠ Nivel de Peligro:"), gbc);
+        gbc.gridx = 1;
+        panel.add(threatLevelComboBox, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 3;
+        panel.add(createStyledLabel("✨ Habilidad Especial:"), gbc);
+        gbc.gridx = 1;
+        panel.add(abilityField, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 4;
+        panel.add(createStyledLabel("📅 Fecha de Captura (YYYY-MM-DD):"), gbc);
+        gbc.gridx = 1;
+        panel.add(dateField, gbc);
+
+      
+        gbc.gridx = 0; gbc.gridy = 5; gbc.gridwidth = 2;
         JButton captureButton = createStyledButton("📷 Capturar Fantasma");
         captureButton.addActionListener(new CaptureButtonListener());
-        panel.add(captureButton);
+        panel.add(captureButton, gbc);
 
-        // Etiqueta de estado (errores)
+      
+        gbc.gridy = 6;
         statusLabel = createStyledLabel("");
         statusLabel.setForeground(Color.RED);
-        panel.add(statusLabel);
+        panel.add(statusLabel, gbc);
 
         add(panel);
         setVisible(true);
@@ -98,28 +116,23 @@ public class CaptureGhostFrame extends JFrame {
             try {
                 GhostModel capturedGhost = new GhostModel(name, ghostClass, threatLevel, ability, captureDate);
                 hunterController.captureGhost(capturedGhost);
-                
-                // Mostrar la ventana emergente con los botones de acción
                 showGhostDetailsDialog(capturedGhost, ectoplasmicAffinity);
-                
-                dispose(); // Cierra la ventana de captura después de añadir el fantasma
+                dispose();
             } catch (IllegalArgumentException ex) {
                 statusLabel.setText("❌ Error: " + ex.getMessage());
             }
         }
     }
 
-    // 🟢 Método para mostrar la ventana emergente con botones de acción
     private void showGhostDetailsDialog(GhostModel ghost, int ectoplasmicAffinity) {
         JDialog dialog = new JDialog(this, "Fantasma Capturado", true);
-        dialog.setSize(350, 300);
+        dialog.setSize(450, 400);
         dialog.setLocationRelativeTo(this);
         dialog.setResizable(false);
-        
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(8, 1));
+    
+        JPanel panel = new JPanel(new GridLayout(9, 1));
         panel.setBackground(Color.BLACK);
-        
+    
         panel.add(createStyledLabel("✅ ¡Fantasma capturado exitosamente!"));
         panel.add(createStyledLabel("📌 Nombre: " + ghost.getName()));
         panel.add(createStyledLabel("📌 Clase: " + ghost.getGhostClass()));
@@ -127,40 +140,39 @@ public class CaptureGhostFrame extends JFrame {
         panel.add(createStyledLabel("📌 Habilidad: " + ghost.getSpecialAbility()));
         panel.add(createStyledLabel("📌 Fecha de Captura: " + ghost.getCaptureDate()));
         panel.add(createStyledLabel("📌 Afinidad Ectoplásmica: " + ectoplasmicAffinity + "/10"));
-
-        // Botones de acción
-        JPanel buttonPanel = new JPanel();
+    
+        // 🔹 Botones de acción
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         buttonPanel.setBackground(Color.BLACK);
-
+    
         JButton addAnotherButton = createStyledButton("📜 Añadir Otro Fantasma");
         addAnotherButton.addActionListener(e -> {
             dialog.dispose();
-            new CaptureGhostFrame(hunterController); // Abre otra instancia para añadir otro fantasma
+            new CaptureGhostFrame(hunterController); 
         });
-
+    
         JButton menuButton = createStyledButton("🏠 Volver al Menú");
         menuButton.addActionListener(e -> {
             dialog.dispose();
-            new MainFrame(hunterController); // Vuelve al menú principal
+            new MainFrame(hunterController); 
         });
-
+    
         buttonPanel.add(addAnotherButton);
         buttonPanel.add(menuButton);
-
         panel.add(buttonPanel);
+    
         dialog.add(panel);
         dialog.setVisible(true);
     }
-
-    // 🟢 Métodos de estilo
     private JLabel createStyledLabel(String text) {
         JLabel label = new JLabel(text);
         label.setForeground(Color.GREEN);
+        label.setFont(new Font("Arial", Font.BOLD, 16)); 
         return label;
     }
 
     private JTextField createStyledTextField() {
-        JTextField textField = new JTextField();
+        JTextField textField = new JTextField(20);
         textField.setBackground(Color.BLACK);
         textField.setForeground(Color.GREEN);
         textField.setCaretColor(Color.GREEN);
@@ -178,24 +190,11 @@ public class CaptureGhostFrame extends JFrame {
 
     private JButton createStyledButton(String text) {
         JButton button = new JButton(text);
-        button.setBackground(Color.BLACK);
-        button.setForeground(Color.GREEN);
+        button.setBackground(new Color(0, 150, 0));
+        button.setForeground(Color.WHITE);
+        button.setFont(new Font("Arial", Font.BOLD, 18)); // 🔺 Aumentamos tamaño de fuente
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
-
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setForeground(Color.BLACK);
-                button.setBackground(Color.GREEN);
-            }
-
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setForeground(Color.GREEN);
-                button.setBackground(Color.BLACK);
-            }
-        });
 
         return button;
     }
