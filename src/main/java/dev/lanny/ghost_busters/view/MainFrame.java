@@ -13,6 +13,7 @@ import javax.swing.*;
 import dev.lanny.ghost_busters.controller.HunterController;
 import dev.lanny.ghost_busters.model.HunterModel;
 
+
 public class MainFrame extends JFrame {
     private static final int WIDTH = 1200;
     private static final int HEIGHT = 600;
@@ -56,6 +57,7 @@ public class MainFrame extends JFrame {
             backgroundLabel.setBounds(0, 0, WIDTH, HEIGHT);
             layeredPane.add(backgroundLabel, JLayeredPane.DEFAULT_LAYER);
         } else {
+            JOptionPane.showMessageDialog(this, "No se pudo cargar la imagen de fondo.", "Error", JOptionPane.ERROR_MESSAGE);
             System.err.println("No se pudo cargar la imagen de fondo.");
         }
     }
@@ -66,9 +68,16 @@ public class MainFrame extends JFrame {
         buttonPanel.setBounds(0, 0, WIDTH, HEIGHT);
 
         JButton captureButton = createStyledButton("📷 Capturar Fantasma", 450, 200, () -> new CaptureGhostFrame());
-        JButton listButton = createStyledButton("📜 Ver Lista de Fantasmas", 450, 270, () -> showGhostList());
-        JButton deleteButton = createStyledButton("🔍 Eliminar Fantasmas", 450, 340, () -> showDeleteGhosts());
-        JButton exitButton = createStyledButton("🚪 Salir", 450, 410, () -> System.exit(0));
+        captureButton.setName("captureButton");
+
+        JButton listButton = createStyledButton("📜 Ver Lista de Fantasmas", 450, 270, this::showGhostList);
+        listButton.setName("listButton");
+
+        JButton deleteButton = createStyledButton("🔍 Eliminar Fantasmas", 450, 340, this::showDeleteGhosts);
+        deleteButton.setName("deleteButton");
+
+        JButton exitButton = createStyledButton("🚪 Salir", 450, 410, this::exitApplication);
+        exitButton.setName("exitButton");
 
         buttonPanel.add(captureButton);
         buttonPanel.add(listButton);
@@ -114,6 +123,10 @@ public class MainFrame extends JFrame {
     private void showDeleteGhosts() {
         JOptionPane.showMessageDialog(this, "Aquí se gestionará la eliminación de fantasmas.", "Eliminar Fantasmas",
                 JOptionPane.WARNING_MESSAGE);
+    }
+
+    private void exitApplication() {
+        dispose(); // Cierra solo la ventana en lugar de terminar la aplicación
     }
 
     private ImageIcon loadImage(String filename) {
