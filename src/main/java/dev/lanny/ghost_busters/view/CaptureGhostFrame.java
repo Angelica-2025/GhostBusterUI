@@ -13,7 +13,6 @@ import dev.lanny.ghost_busters.model.GhostClass;
 import dev.lanny.ghost_busters.model.ThreatLevel;
 
 
-
 public class CaptureGhostFrame extends JFrame {
     private JTextField nameField;
     private JComboBox<GhostClass> ghostClassComboBox;
@@ -25,10 +24,6 @@ public class CaptureGhostFrame extends JFrame {
     private HunterController hunterController;
 
     public CaptureGhostFrame(HunterController hunterController) {
-        if (hunterController == null) {
-            throw new IllegalArgumentException("❌ ERROR: hunterController no puede ser NULL en CaptureGhostFrame");
-        }
-    
         this.hunterController = hunterController;
 
         setTitle("👻 Capturar un Nuevo Fantasma");
@@ -37,7 +32,7 @@ public class CaptureGhostFrame extends JFrame {
         setResizable(false);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        // Establecer fondo negro y bordes verdes
+        // Panel con fondo negro y bordes verdes
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(7, 2, 10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
@@ -53,7 +48,7 @@ public class CaptureGhostFrame extends JFrame {
         ghostClassComboBox = createStyledComboBox(GhostClass.values());
         threatLevelComboBox = createStyledComboBox(ThreatLevel.values());
 
-        // Etiquetas de color verde
+        // Etiquetas en verde
         panel.add(createStyledLabel("👻 Nombre del Fantasma:"));
         panel.add(nameField);
         panel.add(createStyledLabel("👻 Clase del Fantasma:"));
@@ -72,7 +67,7 @@ public class CaptureGhostFrame extends JFrame {
 
         // Etiqueta de estado (errores)
         statusLabel = createStyledLabel("");
-        statusLabel.setForeground(Color.RED); // Los errores se mostrarán en rojo
+        statusLabel.setForeground(Color.RED);
         panel.add(statusLabel);
 
         add(panel);
@@ -98,56 +93,64 @@ public class CaptureGhostFrame extends JFrame {
                 return;
             }
 
-          //  int ectoplasmicAffinity = new Random().nextInt(10) + 1;
+            int ectoplasmicAffinity = new Random().nextInt(10) + 1;
 
             try {
                 GhostModel capturedGhost = new GhostModel(name, ghostClass, threatLevel, ability, captureDate);
                 hunterController.captureGhost(capturedGhost);
                 
-                int ectoplasmicAffinity = new Random().nextInt(10) + 1;
-            
-                // Mostrar el cuadro de diálogo antes de cerrar la ventana
+                // Mostrar la ventana emergente con los botones de acción
                 showGhostDetailsDialog(capturedGhost, ectoplasmicAffinity);
-            
-                // Ahora cerramos la ventana después de que el usuario cierre el cuadro de diálogo
-                dispose();
+                
+                dispose(); // Cierra la ventana de captura después de añadir el fantasma
             } catch (IllegalArgumentException ex) {
                 statusLabel.setText("❌ Error: " + ex.getMessage());
             }
         }
     }
 
-    // 🟢 Método para mostrar una ventana emergente con los detalles del fantasma
+    // 🟢 Método para mostrar la ventana emergente con botones de acción
     private void showGhostDetailsDialog(GhostModel ghost, int ectoplasmicAffinity) {
-        System.out.println("🟢 showGhostDetailsDialog() fue llamado correctamente.");
-    
-        SwingUtilities.invokeLater(() -> {
-            System.out.println("🟢 Creando el JDialog...");
-    
-            JDialog dialog = new JDialog(this, "Fantasma Capturado", true);
-            dialog.setSize(350, 250);
-            dialog.setLocationRelativeTo(this);
-            dialog.setResizable(false);
-            
-            JPanel panel = new JPanel();
-            panel.setLayout(new GridLayout(7, 1));
-            panel.setBackground(Color.BLACK);
-            
-            panel.add(createStyledLabel("✅ ¡Fantasma capturado exitosamente!"));
-            panel.add(createStyledLabel("📌 Nombre: " + ghost.getName()));
-            panel.add(createStyledLabel("📌 Clase: " + ghost.getGhostClass()));
-            panel.add(createStyledLabel("📌 Nivel de Peligro: " + ghost.getThreatLevel()));
-            panel.add(createStyledLabel("📌 Habilidad: " + ghost.getSpecialAbility()));
-            panel.add(createStyledLabel("📌 Fecha de Captura: " + ghost.getCaptureDate()));
-            panel.add(createStyledLabel("📌 Afinidad Ectoplásmica: " + ectoplasmicAffinity + "/10"));
-    
-            dialog.add(panel);
-            dialog.setVisible(true);
-            
-            System.out.println("🟢 JDialog debería estar visible ahora.");
+        JDialog dialog = new JDialog(this, "Fantasma Capturado", true);
+        dialog.setSize(350, 300);
+        dialog.setLocationRelativeTo(this);
+        dialog.setResizable(false);
+        
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(8, 1));
+        panel.setBackground(Color.BLACK);
+        
+        panel.add(createStyledLabel("✅ ¡Fantasma capturado exitosamente!"));
+        panel.add(createStyledLabel("📌 Nombre: " + ghost.getName()));
+        panel.add(createStyledLabel("📌 Clase: " + ghost.getGhostClass()));
+        panel.add(createStyledLabel("📌 Nivel de Peligro: " + ghost.getThreatLevel()));
+        panel.add(createStyledLabel("📌 Habilidad: " + ghost.getSpecialAbility()));
+        panel.add(createStyledLabel("📌 Fecha de Captura: " + ghost.getCaptureDate()));
+        panel.add(createStyledLabel("📌 Afinidad Ectoplásmica: " + ectoplasmicAffinity + "/10"));
+
+        // Botones de acción
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setBackground(Color.BLACK);
+
+        JButton addAnotherButton = createStyledButton("📜 Añadir Otro Fantasma");
+        addAnotherButton.addActionListener(e -> {
+            dialog.dispose();
+            new CaptureGhostFrame(hunterController); // Abre otra instancia para añadir otro fantasma
         });
+
+        JButton menuButton = createStyledButton("🏠 Volver al Menú");
+        menuButton.addActionListener(e -> {
+            dialog.dispose();
+            new MainFrame(hunterController); // Vuelve al menú principal
+        });
+
+        buttonPanel.add(addAnotherButton);
+        buttonPanel.add(menuButton);
+
+        panel.add(buttonPanel);
+        dialog.add(panel);
+        dialog.setVisible(true);
     }
-    
 
     // 🟢 Métodos de estilo
     private JLabel createStyledLabel(String text) {
