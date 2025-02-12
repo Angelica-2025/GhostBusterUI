@@ -39,11 +39,21 @@ public class MainFrameTest {
 
     @Test
     void shouldContainAllButtons() {
-        window.requireVisible(); 
+        window.requireVisible();
         window.button("captureButton").requireVisible();
         window.button("listButton").requireVisible();
         window.button("deleteButton").requireVisible();
         window.button("exitButton").requireVisible();
+    }
+
+    @Test
+    void shouldTriggerCaptureButtonAction() {
+        window.button("captureButton").click();
+
+        // Aquí puedes agregar una verificación adicional si la ventana de captura
+        // realmente se abre.
+        // Por ejemplo:
+        // assertTrue(isCaptureWindowOpen());
     }
 
 }
