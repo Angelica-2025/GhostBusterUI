@@ -40,7 +40,24 @@ public class DeleteGhostFrame extends JFrame {
             String selectedGhost = ghostList.getSelectedValue();
             if (selectedGhost != null) {
                 int ghostId = extractGhostId(selectedGhost);
-                boolean isDeleted = hunterController.freedomGhost(ghostId);
+                int choice = JOptionPane.showConfirmDialog(
+        this,
+        "Are you sure you want to release this ghost?",
+        "Confirmation",
+        JOptionPane.YES_NO_OPTION
+);
+boolean isDeleted = false;
+if (choice == JOptionPane.YES_OPTION) {
+    isDeleted = hunterController.freedomGhost(ghostId);
+    if (isDeleted) {
+        updateGhostList(); // Refresh the list after deletion
+        JOptionPane.showMessageDialog(this, 
+            "The ghost has been successfully released!", "Success", JOptionPane.INFORMATION_MESSAGE);
+    } else {
+        JOptionPane.showMessageDialog(this, 
+            "Failed to release the ghost!", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+}
                 
                 if (isDeleted) {
                     updateGhostList(); // Refresh the list after deletion
