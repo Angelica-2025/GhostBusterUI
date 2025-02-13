@@ -88,7 +88,7 @@ public class MainFrame extends JFrame {
                 System.err.println("❌ ERROR: hunterController es NULL antes de abrir ListGhostsFrame");
                 return;
             }
-            new ListGhostsFrame();
+            new ListGhostsFrame(this.hunterController);
         });
         listButton.setName("listButton");
 
