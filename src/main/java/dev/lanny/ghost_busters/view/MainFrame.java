@@ -141,17 +141,39 @@ public class MainFrame extends JFrame {
     }
 
     private void exitApplication() {
-        int option = JOptionPane.showConfirmDialog(
-            this,
-             "¿Estas seguro que deseas salir del juego?",
-              "Confirmar Salida",
-              JOptionPane.YES_NO_OPTION,
-              JOptionPane.WARNING_MESSAGE
+        
+        Color backgroundDark = new Color(34, 34, 34); 
+        Color textWhite = Color.WHITE;     
+        Color buttonBlue = new Color(0, 180, 180);     
+        
+        UIManager.put("OptionPane.background", backgroundDark);
+        UIManager.put("Panel.background", backgroundDark);
+        UIManager.put("OptionPane.messageForeground", textWhite);   
+         
+        UIManager.put("Button.background", buttonBlue);
+        UIManager.put("Button.foreground", Color.BLACK);
+        UIManager.put("Button.border", BorderFactory.createLineBorder(buttonBlue, 2));
+        UIManager.put("Button.font", new Font("SansSerif", Font.BOLD, 14));
+    
+        // Crear el mensaje con HTML para estilizarlo mejor
+        String message = "<html><body style='text-align: center;'>"
+                + "<p style='font-size:14px; color:white;'>"
+                + "👻 ¿Estás seguro de que deseas salir del juego?"
+                + "</p></body></html>";
+
+                int option = JOptionPane.showConfirmDialog(
+                this,
+                message,
+                "🔴 Confirmar Salida",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.PLAIN_MESSAGE
         );
-        if (option == JOptionPane.YES_OPTION)
-        System.exit(0);
-        //dispose();
+    
+        if (option == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
     }
+    
 
     private ImageIcon loadImage(String filename) {
         try {
