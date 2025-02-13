@@ -1,82 +1,96 @@
 package dev.lanny.ghost_busters.view;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
 import dev.lanny.ghost_busters.controller.HunterController;
 import dev.lanny.ghost_busters.model.GhostModel;
 
-import javax.swing.*;
-import java.awt.*;
-import java.util.List;
-
 public class ListGhostsFrame extends JFrame {
     private HunterController hunterController;
-    private JTextArea ghostListArea;
-    private JButton listButton;
-    private JButton exitButton;
 
     public ListGhostsFrame(HunterController hunterController) {
+        if (hunterController == null) {
+            throw new IllegalArgumentException("❌ ERROR: hunterController no puede ser NULL en ListGhostsFrame");
+        }
+
         this.hunterController = hunterController;
-
-        setTitle("Lista de Fantasmas Atrapados");
-        setSize(600, 400);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("📜 Lista de Fantasmas Capturados");
+        setSize(800, 600);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
+        setResizable(false);
 
-        initComponents();
-    }
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBackground(Color.BLACK); // Fondo negro
 
-    private void initComponents() {
+        // Título
+        JLabel titleLabel = new JLabel("📜 Lista de Fantasmas Capturados", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setOpaque(true);
+        titleLabel.setBackground(Color.BLACK);
+        mainPanel.add(titleLabel, BorderLayout.NORTH);
 
-        JPanel mainPanel = new JPanel();
-        mainPanel.setBackground(Color.BLACK);
-        mainPanel.setLayout(new BorderLayout());
-
-        ghostListArea = new JTextArea();
-        ghostListArea.setBackground(Color.BLACK);
-        ghostListArea.setForeground(Color.WHITE);
-        ghostListArea.setFont(new Font("Monospaced", Font.PLAIN, 14));
-        ghostListArea.setEditable(false); // No editable
-        JScrollPane scrollPane = new JScrollPane(ghostListArea);
+        // Tabla de fantasmas
+        JTable ghostsTable = createGhostsTable();
+        JScrollPane scrollPane = new JScrollPane(ghostsTable);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
+        // Botón para salir
+        JButton backButton = new JButton("🚪 Volver");
+        backButton.setFont(new Font("Sans", Font.BOLD, 16));
+        backButton.setBackground(Color.BLACK);
+        backButton.setForeground(Color.GREEN);
+        backButton.setFocusPainted(false);
+        backButton.setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose(); // Cierra este frame y vuelve al MainFrame
+            }
+        });
+
+        // Panel para el botón
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setBackground(Color.BLACK);
-        buttonPanel.setLayout(new FlowLayout());
-
-        listButton = new JButton("Listar Fantasmas");
-        listButton.setBackground(new Color(0, 255, 0));
-        listButton.setForeground(Color.BLACK);
-        listButton.setFont(new Font("Arial", Font.BOLD, 14));
-        buttonPanel.add(listButton);
-
-        exitButton = new JButton("Salir");
-        exitButton.setBackground(new Color(0, 255, 0));
-        exitButton.setForeground(Color.BLACK);
-        exitButton.setFont(new Font("Arial", Font.BOLD, 14));
-        exitButton.addActionListener(e -> System.exit(0));
-        buttonPanel.add(exitButton);
-
+        buttonPanel.setBackground(Color.BLACK); // Fondo negro
+        buttonPanel.add(backButton);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
-        add(mainPanel);
-
+        setContentPane(mainPanel);
+        setVisible(true);
     }
 
-    public List<GhostModel> getCapturedGhosts() {
-        return hunterController.getCapturedGhosts();
-        // List<hunterControler> ghosts = hunterController.getCapturedGhosts();
+    private JTable createGhostsTable() {
+        String[] columnNames = {"ID", "Nombre", "Clase", "Fecha de Captura"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
 
-        // if (ghosts.isEmpty()) {
-        // ghostListArea.append("No hay fantasmas capturados.\n");
-        // } else {
-        // ghostListArea.append("Fantasmas capturados:\n\n");
-        // for (GhostModel ghost : ghosts) {
-        // ghostListArea.append("ID: " + ghost.getId() + "\n");
-        // ghostListArea.append("Nombre: " + ghost.getName() + "\n");
-        // ghostListArea.append("Clase: " + ghost.getGhostClass() + "\n");
-        // ghostListArea.append("Fecha de captura: " + ghost.getCaptureDate() + "\n");
-        // }
-        // }
-        // }
+        List<GhostModel> ghosts = hunterController.getCapturedGhosts();
+        for (GhostModel ghost : ghosts) {
+            Object[] row = {
+                ghost.getId(),
+                ghost.getName(),
+                ghost.getGhostClass().toString(),
+                ghost.getCaptureDate().toString()
+            };
+            model.addRow(row);
+        }
 
+        JTable table = new JTable(model);
+        table.setFont(new Font("Arial", Font.PLAIN, 14));
+        table.setForeground(Color.WHITE);
+        table.setBackground(Color.BLACK);
+        table.setGridColor(Color.GREEN);
+        table.setSelectionBackground(Color.GREEN);
+        table.setSelectionForeground(Color.BLACK);
+        table.setRowHeight(25);
+
+        return table;
     }
 }

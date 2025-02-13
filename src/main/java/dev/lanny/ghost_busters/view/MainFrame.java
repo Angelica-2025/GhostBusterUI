@@ -84,7 +84,7 @@ public class MainFrame extends JFrame {
 
         JButton listButton = createStyledButton("📜 Ver Lista de Fantasmas", 450, 270, () -> {
 
-            new ListGhostsFrame();
+            new ListGhostsFrame(this.hunterController);
         } );
         
         listButton.setName("listButton");
