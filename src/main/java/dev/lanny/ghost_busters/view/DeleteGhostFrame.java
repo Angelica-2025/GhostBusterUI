@@ -79,27 +79,5 @@ public class DeleteGhostFrame extends JFrame {
         }
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            try {
-                System.out.println("Initializing HunterModel and HunterController...");
-
-                // transfer of hunter's name with an empty ghost list
-                List<GhostModel> emptyGhostList = new ArrayList<>();
-                HunterModel hunterModel = new HunterModel("Ghostbuster John", emptyGhostList);
-                HunterController hunterController = new HunterController(hunterModel);
-
-                System.out.println("Creating GUI window...");
-                DeleteGhostFrame frame = new DeleteGhostFrame(hunterController);
-
-                Thread.sleep(500); // delay in case of errors with a flow
-
-                frame.setVisible(true);
-                System.out.println("GUI should be visible now!");
-
-            } catch (Exception e) {
-                e.printStackTrace(); // show erros in console
-            }
-        });
-    }
+    
 }

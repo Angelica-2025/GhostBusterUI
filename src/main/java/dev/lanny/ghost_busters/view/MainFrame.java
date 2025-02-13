@@ -13,7 +13,6 @@ import javax.swing.*;
 import dev.lanny.ghost_busters.controller.HunterController;
 import dev.lanny.ghost_busters.model.HunterModel;
 
-
 public class MainFrame extends JFrame {
     private static final int WIDTH = 1200;
     private static final int HEIGHT = 600;
@@ -25,7 +24,7 @@ public class MainFrame extends JFrame {
         if (hunterController == null) {
             throw new IllegalArgumentException("❌ ERROR: hunterController no puede ser NULL en MainFrame");
         }
-    
+
         this.hunterController = hunterController;
         setTitle("👻 GhostBusters Asturias - Base de Operaciones");
         setSize(WIDTH, HEIGHT);
@@ -63,7 +62,8 @@ public class MainFrame extends JFrame {
             backgroundLabel.setBounds(0, 0, WIDTH, HEIGHT);
             layeredPane.add(backgroundLabel, JLayeredPane.DEFAULT_LAYER);
         } else {
-            JOptionPane.showMessageDialog(this, "No se pudo cargar la imagen de fondo.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "No se pudo cargar la imagen de fondo.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
             System.err.println("No se pudo cargar la imagen de fondo.");
         }
     }
@@ -83,13 +83,22 @@ public class MainFrame extends JFrame {
         captureButton.setName("captureButton");
 
         JButton listButton = createStyledButton("📜 Ver Lista de Fantasmas", 450, 270, () -> {
-
+            if (this.hunterController == null) {
+                System.err.println("❌ ERROR: hunterController es NULL antes de abrir ListGhostsFrame");
+                return;
+            }
             new ListGhostsFrame();
-        } );
-        
+        });
         listButton.setName("listButton");
 
-        JButton deleteButton = createStyledButton("🔍 Eliminar Fantasmas", 450, 340, this::showDeleteGhosts);
+        JButton deleteButton = createStyledButton("🔍 Eliminar Fantasmas", 450, 340, () ->{
+            if (this.hunterController == null) {
+                System.err.println("❌ ERROR: hunterController es NULL antes de abrir DeleteGhostFrame");
+                return;
+            }
+            new DeleteGhostFrame(this.hunterController).setVisible(true);
+        
+        });       
         deleteButton.setName("deleteButton");
 
         JButton exitButton = createStyledButton("🚪 Salir", 450, 410, this::exitApplication);
@@ -131,10 +140,7 @@ public class MainFrame extends JFrame {
         return button;
     }
 
-       private void showDeleteGhosts() {
-        JOptionPane.showMessageDialog(this, "Aquí se gestionará la eliminación de fantasmas.", "Eliminar Fantasmas",
-                JOptionPane.WARNING_MESSAGE);
-    }
+     
 
     private void exitApplication() {
         dispose(); // Cierra solo la ventana en lugar de terminar la aplicación
@@ -152,12 +158,11 @@ public class MainFrame extends JFrame {
     public static void main(String[] args) {
         HunterModel hunterModel = new HunterModel("Egon Spengler", new ArrayList<>());
         HunterController hunterController = new HunterController(hunterModel);
-    
+
         SwingUtilities.invokeLater(() -> {
             MainFrame mainFrame = new MainFrame(hunterController);
             mainFrame.setVisible(true); // Ahora sí usamos la variable
         });
     }
-    
- } 
-    
+
+}
