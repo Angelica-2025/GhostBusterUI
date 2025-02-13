@@ -83,6 +83,7 @@ public class MainFrame extends JFrame {
         captureButton.setName("captureButton");
 
         JButton listButton = createStyledButton("📜 Ver Lista de Fantasmas", 450, 270, () -> {
+
             if (this.hunterController == null) {
                 System.err.println("❌ ERROR: hunterController es NULL antes de abrir ListGhostsFrame");
                 return;
