@@ -34,16 +34,16 @@ public class MainFrame extends JFrame {
 
         JLayeredPane layeredPane = new JLayeredPane();
         layeredPane.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        layeredPane.setOpaque(true);
-        layeredPane.setBackground(Color.BLACK);
+        //layeredPane.setOpaque(true);
+        //layeredPane.setBackground(Color.BLACK);
 
         setupBackground(layeredPane);
 
         JLabel titleLabel = new JLabel("👻 GhostBusters Asturias - Base de Operaciones 👻", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 28));
+        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 26));
         titleLabel.setForeground(Color.WHITE);
         titleLabel.setOpaque(true);
-        titleLabel.setBackground(Color.BLACK);
+        titleLabel.setBackground(new Color(0, 0, 0, 160));
         titleLabel.setBounds(0, 0, WIDTH, 80);
         layeredPane.add(titleLabel, JLayeredPane.MODAL_LAYER);
 
@@ -115,25 +115,25 @@ public class MainFrame extends JFrame {
     private JButton createStyledButton(String text, int x, int y, Runnable action) {
         JButton button = new JButton(text);
         button.setBounds(x, y, 300, 50);
-        button.setFont(new Font("Arial", Font.BOLD, 16));
-        button.setBackground(Color.BLACK);
-        button.setForeground(Color.GREEN);
+        button.setFont(new Font("SansSerif", Font.BOLD, 16));
+        button.setBackground(new Color(50, 50, 50));
+        button.setForeground(Color.WHITE);
         button.setFocusPainted(false);
-        button.setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
+        button.setBorder(BorderFactory.createLineBorder(new Color(0, 180, 180), 2));
 
         button.addActionListener(e -> action.run());
 
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
+                button.setBackground(new Color(0, 180, 180));
                 button.setForeground(Color.BLACK);
-                button.setBackground(Color.GREEN);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                button.setForeground(Color.GREEN);
-                button.setBackground(Color.BLACK);
+                button.setBackground(new Color(50, 50, 50));
+                button.setForeground(Color.WHITE);
             }
         });
 
