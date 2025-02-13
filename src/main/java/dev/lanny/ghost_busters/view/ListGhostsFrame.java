@@ -28,9 +28,9 @@ public class ListGhostsFrame extends JFrame {
         setResizable(false);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBackground(Color.BLACK); // Fondo negro
+        mainPanel.setBackground(Color.BLACK); 
 
-        // Título
+   
         JLabel titleLabel = new JLabel("📜 Lista de Fantasmas Capturados", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         titleLabel.setForeground(Color.WHITE);
@@ -38,7 +38,7 @@ public class ListGhostsFrame extends JFrame {
         titleLabel.setBackground(Color.BLACK);
         mainPanel.add(titleLabel, BorderLayout.NORTH);
 
-        // Tabla de fantasmas
+        
         JTable ghostsTable = createGhostsTable();
         JScrollPane scrollPane = new JScrollPane(ghostsTable);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
@@ -53,13 +53,13 @@ public class ListGhostsFrame extends JFrame {
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                dispose(); // Cierra este frame y vuelve al MainFrame
+                dispose(); 
             }
         });
 
-        // Panel para el botón
+       
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setBackground(Color.BLACK); // Fondo negro
+        buttonPanel.setBackground(Color.BLACK); 
         buttonPanel.add(backButton);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
