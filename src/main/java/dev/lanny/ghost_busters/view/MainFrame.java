@@ -82,7 +82,11 @@ public class MainFrame extends JFrame {
         });
         captureButton.setName("captureButton");
 
-        JButton listButton = createStyledButton("📜 Ver Lista de Fantasmas", 450, 270, this::showGhostList);
+        JButton listButton = createStyledButton("📜 Ver Lista de Fantasmas", 450, 270, () -> {
+
+            new ListGhostsFrame();
+        } );
+        
         listButton.setName("listButton");
 
         JButton deleteButton = createStyledButton("🔍 Eliminar Fantasmas", 450, 340, this::showDeleteGhosts);
@@ -127,12 +131,7 @@ public class MainFrame extends JFrame {
         return button;
     }
 
-    private void showGhostList() {
-        JOptionPane.showMessageDialog(this, "Aquí se mostrará la lista de fantasmas.", "Lista de Fantasmas",
-                JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    private void showDeleteGhosts() {
+       private void showDeleteGhosts() {
         JOptionPane.showMessageDialog(this, "Aquí se gestionará la eliminación de fantasmas.", "Eliminar Fantasmas",
                 JOptionPane.WARNING_MESSAGE);
     }
