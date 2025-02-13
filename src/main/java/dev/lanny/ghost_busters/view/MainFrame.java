@@ -17,10 +17,16 @@ import dev.lanny.ghost_busters.model.HunterModel;
 public class MainFrame extends JFrame {
     private static final int WIDTH = 1200;
     private static final int HEIGHT = 600;
+    private HunterController hunterController;
 
     private JLabel backgroundLabel;
 
     public MainFrame(HunterController hunterController) {
+        if (hunterController == null) {
+            throw new IllegalArgumentException("❌ ERROR: hunterController no puede ser NULL en MainFrame");
+        }
+    
+        this.hunterController = hunterController;
         setTitle("👻 GhostBusters Asturias - Base de Operaciones");
         setSize(WIDTH, HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -67,7 +73,13 @@ public class MainFrame extends JFrame {
         buttonPanel.setOpaque(false);
         buttonPanel.setBounds(0, 0, WIDTH, HEIGHT);
 
-        JButton captureButton = createStyledButton("📷 Capturar Fantasma", 450, 200, () -> new CaptureGhostFrame());
+        JButton captureButton = createStyledButton("📷 Capturar Fantasma", 450, 200, () -> {
+            if (this.hunterController == null) {
+                System.err.println("❌ ERROR: hunterController es NULL antes de abrir CaptureGhostFrame");
+                return;
+            }
+            new CaptureGhostFrame(this.hunterController);
+        });
         captureButton.setName("captureButton");
 
         JButton listButton = createStyledButton("📜 Ver Lista de Fantasmas", 450, 270, this::showGhostList);
@@ -141,7 +153,12 @@ public class MainFrame extends JFrame {
     public static void main(String[] args) {
         HunterModel hunterModel = new HunterModel("Egon Spengler", new ArrayList<>());
         HunterController hunterController = new HunterController(hunterModel);
-
-        SwingUtilities.invokeLater(() -> new MainFrame(hunterController));
+    
+        SwingUtilities.invokeLater(() -> {
+            MainFrame mainFrame = new MainFrame(hunterController);
+            mainFrame.setVisible(true); // Ahora sí usamos la variable
+        });
     }
-}
+    
+ } 
+    
