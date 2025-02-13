@@ -16,9 +16,11 @@ public class CaptureGhostFrame extends JFrame {
     private JComboBox<ThreatLevel> threatLevelComboBox;
     private JLabel statusLabel;
     private final HunterController hunterController;
+    private final MainFrame mainFrame;
 
-    public CaptureGhostFrame(HunterController hunterController) {
+    public CaptureGhostFrame(MainFrame mainFrame, HunterController hunterController) {
         this.hunterController = hunterController;
+        this.mainFrame = mainFrame;
         setupFrame();
 
         JPanel panel = createPanel();
@@ -97,11 +99,11 @@ public class CaptureGhostFrame extends JFrame {
         }
 
         try {
-            GhostModel ghost = new GhostModel(name, 
-                (GhostClass) ghostClassComboBox.getSelectedItem(),
-                (ThreatLevel) threatLevelComboBox.getSelectedItem(), 
-                ability, captureDate);
-            
+            GhostModel ghost = new GhostModel(name,
+                    (GhostClass) ghostClassComboBox.getSelectedItem(),
+                    (ThreatLevel) threatLevelComboBox.getSelectedItem(),
+                    ability, captureDate);
+
             hunterController.captureGhost(ghost);
             updateStatusLabel("✅ ¡Fantasma capturado!");
 
@@ -113,26 +115,28 @@ public class CaptureGhostFrame extends JFrame {
     }
 
     private void showGhostDetailsDialog(GhostModel ghost, int affinity) {
-        JDialog dialog = new JDialog(this, "Fantasma Capturado", true);
+        JDialog dialog = new JDialog(this, "👻 Detalles del Fantasma", true);
         dialog.setSize(400, 350);
         dialog.setLocationRelativeTo(this);
         dialog.setResizable(false);
 
         JPanel panel = new JPanel(new GridLayout(8, 1));
-        panel.setBackground(Color.BLACK);
+        panel.setBackground(new Color(30, 30, 30));
 
-        panel.add(createLabel("✅ ¡Fantasma capturado!", true));
-        panel.add(createLabel("📌 Nombre: " + ghost.getName(), false));
+        panel.add(createLabel("📌 Nombre: " + ghost.getName(), true));
         panel.add(createLabel("📌 Clase: " + ghost.getGhostClass(), true));
-        panel.add(createLabel("📌 Peligro: " + ghost.getThreatLevel(), false));
+        panel.add(createLabel("📌 Peligro: " + ghost.getThreatLevel(), true));
         panel.add(createLabel("📌 Habilidad: " + ghost.getSpecialAbility(), true));
-        panel.add(createLabel("📌 Fecha: " + ghost.getCaptureDate(), false));
+        panel.add(createLabel("📌 Fecha: " + ghost.getCaptureDate(), true));
         panel.add(createLabel("📌 Afinidad Ectoplásmica: " + affinity + "/10", true));
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        buttonPanel.setBackground(Color.BLACK);
-        buttonPanel.add(createDialogButton("➕ Añadir Otro", dialog, () -> new CaptureGhostFrame(hunterController)));
-        buttonPanel.add(createDialogButton("🏠 Menú", dialog, () -> new MainFrame(hunterController)));
+        buttonPanel.setBackground(new Color(30, 30, 30));
+        buttonPanel.add(createDialogButton("➕ Añadir Otro Fantasma", dialog,
+                () -> new CaptureGhostFrame(mainFrame, hunterController)));
+        buttonPanel.add(createDialogButton("🏠 Menú Principal", dialog, () -> {
+            mainFrame.setVisible(true);
+        }));
 
         panel.add(buttonPanel);
         dialog.add(panel);
@@ -149,8 +153,8 @@ public class CaptureGhostFrame extends JFrame {
 
     private JLabel createLabel(String text, boolean highlight) {
         JLabel label = new JLabel(text);
-        label.setForeground(highlight ? Color.GREEN : Color.WHITE);
-        label.setFont(new Font("Arial", Font.BOLD, 16));
+        label.setForeground(highlight ? Color.GRAY : Color.WHITE);
+        label.setFont(new Font("SansSerif", Font.BOLD, 16));
         return label;
     }
 
@@ -160,10 +164,10 @@ public class CaptureGhostFrame extends JFrame {
 
     private JTextField createTextField(String name, String defaultValue) {
         JTextField textField = new JTextField(defaultValue, 20);
-        textField.setBackground(Color.BLACK);
-        textField.setForeground(Color.GREEN);
-        textField.setCaretColor(Color.GREEN);
-        textField.setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
+        textField.setBackground(new Color(30, 30, 30));
+        textField.setForeground(Color.WHITE);
+        textField.setCaretColor(Color.WHITE);
+        textField.setBorder(BorderFactory.createLineBorder(new Color(0, 180, 180), 2));
         textField.setName(name);
         return textField;
     }
@@ -171,19 +175,19 @@ public class CaptureGhostFrame extends JFrame {
     private <T> JComboBox<T> createComboBox(T[] items, String name) {
         JComboBox<T> comboBox = new JComboBox<>(items);
         comboBox.setBackground(Color.BLACK);
-        comboBox.setForeground(Color.GREEN);
-        comboBox.setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
+        comboBox.setForeground(Color.WHITE);
+        comboBox.setBorder(BorderFactory.createLineBorder(new Color(0, 180, 180), 2));
         comboBox.setName(name);
         return comboBox;
     }
 
     private JButton createButton(String text, String name) {
         JButton button = new JButton(text);
-        button.setBackground(new Color(0, 150, 0));
-        button.setForeground(Color.WHITE);
-        button.setFont(new Font("Arial", Font.BOLD, 16));
+        button.setBackground(new Color(0, 180, 180));
+        button.setForeground(new Color(30, 30, 30));
+        button.setFont(new Font("SansSerif", Font.BOLD, 16));
         button.setFocusPainted(false);
-        button.setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
+        button.setBorder(BorderFactory.createLineBorder(new Color(0, 180, 180), 2));
         button.setName(name);
         return button;
     }
@@ -203,4 +207,3 @@ public class CaptureGhostFrame extends JFrame {
         repaint();
     }
 }
-

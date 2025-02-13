@@ -34,8 +34,6 @@ public class MainFrame extends JFrame {
 
         JLayeredPane layeredPane = new JLayeredPane();
         layeredPane.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        //layeredPane.setOpaque(true);
-        //layeredPane.setBackground(Color.BLACK);
 
         setupBackground(layeredPane);
 
@@ -78,7 +76,8 @@ public class MainFrame extends JFrame {
                 System.err.println("❌ ERROR: hunterController es NULL antes de abrir CaptureGhostFrame");
                 return;
             }
-            new CaptureGhostFrame(this.hunterController);
+            new CaptureGhostFrame(this, hunterController);
+
         });
         captureButton.setName("captureButton");
 
@@ -88,18 +87,18 @@ public class MainFrame extends JFrame {
                 System.err.println("❌ ERROR: hunterController es NULL antes de abrir ListGhostsFrame");
                 return;
             }
-            new ListGhostsFrame();
+            new ListGhostsFrame(this.hunterController);
         });
         listButton.setName("listButton");
 
-        JButton deleteButton = createStyledButton("🔍 Eliminar Fantasmas", 450, 340, () ->{
+        JButton deleteButton = createStyledButton("🔍 Eliminar Fantasmas", 450, 340, () -> {
             if (this.hunterController == null) {
                 System.err.println("❌ ERROR: hunterController es NULL antes de abrir DeleteGhostFrame");
                 return;
             }
             new DeleteGhostFrame(this.hunterController).setVisible(true);
-        
-        });       
+
+        });
         deleteButton.setName("deleteButton");
 
         JButton exitButton = createStyledButton("🚪 Salir", 450, 410, this::exitApplication);
@@ -141,10 +140,8 @@ public class MainFrame extends JFrame {
         return button;
     }
 
-     
-
     private void exitApplication() {
-        dispose(); // Cierra solo la ventana en lugar de terminar la aplicación
+        dispose();
     }
 
     private ImageIcon loadImage(String filename) {
@@ -162,7 +159,7 @@ public class MainFrame extends JFrame {
 
         SwingUtilities.invokeLater(() -> {
             MainFrame mainFrame = new MainFrame(hunterController);
-            mainFrame.setVisible(true); // Ahora sí usamos la variable
+            mainFrame.setVisible(true);
         });
     }
 
