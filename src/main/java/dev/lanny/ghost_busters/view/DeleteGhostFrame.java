@@ -26,7 +26,7 @@ public class DeleteGhostFrame extends JFrame {
         setTitle("Captured Ghosts");
         setSize(400, 300);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
         // Create the ghost list
