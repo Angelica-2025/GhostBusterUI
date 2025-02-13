@@ -66,7 +66,7 @@ public class DeleteGhostFrame extends JFrame {
         ghostListModel.clear();
         List<GhostModel> ghosts = hunterController.getCapturedGhosts();
         for (GhostModel ghost : ghosts) {
-            ghostListModel.addElement(ghost.getId() + " - " + ghost.getName()); // ID + name
+            ghostListModel.addElement(ghost.getId() + " - " + ghost.getName() + " (" + ghost.getGhostClass() + ")"); // ID + name
         }
     }
 
