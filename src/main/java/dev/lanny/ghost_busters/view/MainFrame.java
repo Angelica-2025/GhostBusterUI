@@ -141,7 +141,16 @@ public class MainFrame extends JFrame {
     }
 
     private void exitApplication() {
-        dispose();
+        int option = JOptionPane.showConfirmDialog(
+            this,
+             "¿Estas seguro que deseas salir del juego?",
+              "Confirmar Salida",
+              JOptionPane.YES_NO_OPTION,
+              JOptionPane.WARNING_MESSAGE
+        );
+        if (option == JOptionPane.YES_OPTION)
+        System.exit(0);
+        //dispose();
     }
 
     private ImageIcon loadImage(String filename) {
