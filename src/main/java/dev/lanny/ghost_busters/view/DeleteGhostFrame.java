@@ -14,6 +14,7 @@ public class DeleteGhostFrame extends JFrame {
     private DefaultListModel<String> ghostListModel;
     private JList<String> ghostList;
     private JButton deleteButton;
+    private JButton backButton;
     private HunterController hunterController;
 
     public DeleteGhostFrame(HunterController hunterController) {
@@ -55,8 +56,21 @@ public class DeleteGhostFrame extends JFrame {
             }
         });
 
+
+         // "Back to Menu" button
+         backButton = new JButton("Back to Menu");
+         backButton.addActionListener(e -> {
+             this.dispose(); // Close this window and return to menu
+         });
+ 
+         // Panel for buttons
+         JPanel buttonPanel = new JPanel();
+         buttonPanel.add(deleteButton);
+         buttonPanel.add(backButton);
+ 
+
         add(scrollPane, BorderLayout.CENTER);
-        add(deleteButton, BorderLayout.SOUTH);
+        add(buttonPanel, BorderLayout.SOUTH);
 
         updateGhostList(); // Load the ghost list on startup
     }
