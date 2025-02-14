@@ -2,11 +2,10 @@ package dev.lanny.ghost_busters.view;
 
 import dev.lanny.ghost_busters.controller.HunterController;
 import dev.lanny.ghost_busters.model.GhostModel;
-import dev.lanny.ghost_busters.model.HunterModel;
+
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class DeleteGhostFrame extends JFrame {
