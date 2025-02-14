@@ -7,7 +7,6 @@ import dev.lanny.ghost_busters.model.HunterModel;
 
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
-import javax.swing.JList;
 
 class DeleteGhostFrameTest {
     @Test
@@ -19,5 +18,5 @@ void testGhostListIsCreated() {
         frame.setVisible(true);
         frame.dispose();
     });
-}
+}    
 }
