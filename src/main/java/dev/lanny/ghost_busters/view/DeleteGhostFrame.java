@@ -27,7 +27,7 @@ public class DeleteGhostFrame extends JFrame {
         }
         this.hunterController = hunterController;
 
-        setTitle("Captured Ghosts");
+        setTitle("Fantasmas Capturadas");
         setSize(400, 300);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -47,7 +47,7 @@ public class DeleteGhostFrame extends JFrame {
         scrollPane.getViewport().setBackground(backgroundColor);
 
         // "Release Ghost" button
-        deleteButton = createStyledButton("Release Ghost");
+        deleteButton = createStyledButton("Liberar Fantasma");
         deleteButton.addActionListener(e -> {
             String selectedGhost = ghostList.getSelectedValue();
             if (selectedGhost != null) {
@@ -58,8 +58,8 @@ public class DeleteGhostFrame extends JFrame {
 
                 int choice = JOptionPane.showConfirmDialog(
                         this,
-                        "Are you sure you want to release this ghost?",
-                        "Confirmation",
+                        "Esta seguro de que desea liberar este fantasma?",
+                        "Confirmacion",
                         JOptionPane.YES_NO_OPTION,
                         JOptionPane.PLAIN_MESSAGE
                 );
@@ -69,24 +69,24 @@ public class DeleteGhostFrame extends JFrame {
                     if (isDeleted) {
                         updateGhostList();
                         JOptionPane.showMessageDialog(this, 
-                            "The ghost has been successfully released!", 
-                            "Success", JOptionPane.PLAIN_MESSAGE);
+                            "La liberacion del fantasma fue exitosa!", 
+                            "Exito", JOptionPane.PLAIN_MESSAGE);
                     } else {
                         JOptionPane.showMessageDialog(this, 
-                            "Failed to release the ghost!", 
+                            "Fallado de liberar el fantasma!", 
                             "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             } else {
                 applyDialogStyles();
                 JOptionPane.showMessageDialog(this, 
-                    "Please select a ghost to release!", 
+                    "Por favor, seleccione un fantasma para liberar!", 
                     "Warning", JOptionPane.WARNING_MESSAGE);
             }
         });
 
         // "Back to Menu" button
-        backButton = createStyledButton("Back to Menu");
+        backButton = createStyledButton("Volver al Menu");
         backButton.addActionListener(e -> {
             this.dispose(); // Close this window and return to menu
             new MainFrame(hunterController).setVisible(true);
