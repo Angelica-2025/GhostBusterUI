@@ -84,7 +84,7 @@ public class MainFrame extends JFrame {
                 createButton("📷 Capturar Fantasma", 450, 200, () -> new CaptureGhostFrame(this, hunterController)));
         buttonPanel
                 .add(createButton("📜 Ver Lista de Fantasmas", 450, 270, () -> new ListGhostsFrame(hunterController)));
-        buttonPanel.add(createButton("🔍 Eliminar Fantasmas", 450, 340, () -> new DeleteGhostFrame(hunterController).setVisible(true)));
+        buttonPanel.add(createButton("🔍 Eliminar Fantasmas", 450, 340, () -> new DeleteGhostFrame(this, hunterController).setVisible(true)));
         buttonPanel.add(createButton("🚪 Salir", 450, 410, this::exitApplication));
 
         layeredPane.add(buttonPanel, JLayeredPane.PALETTE_LAYER);
