@@ -20,12 +20,14 @@ public class DeleteGhostFrame extends JFrame {
     private JButton deleteButton;
     private JButton backButton;
     private HunterController hunterController;
+    private final MainFrame mainFrame;
 
-    public DeleteGhostFrame(HunterController hunterController) {
+    public DeleteGhostFrame(MainFrame mainFrame, HunterController hunterController) {
         if (hunterController == null) {
             throw new IllegalArgumentException("HunterController cannot be null");
         }
         this.hunterController = hunterController;
+        this.mainFrame = mainFrame;
 
         setTitle("Fantasmas Capturadas");
         setSize(400, 300);
@@ -89,7 +91,7 @@ public class DeleteGhostFrame extends JFrame {
         backButton = createStyledButton("Volver al Menu");
         backButton.addActionListener(e -> {
             this.dispose(); // Close this window and return to menu
-            new MainFrame(hunterController).setVisible(true);
+            mainFrame.setVisible(true);
         });
 
         // Panel for buttons
