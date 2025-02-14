@@ -70,7 +70,7 @@ public class DeleteGhostFrame extends JFrame {
                         updateGhostList();
                         JOptionPane.showMessageDialog(this, 
                             "The ghost has been successfully released!", 
-                            "Success", JOptionPane.INFORMATION_MESSAGE);
+                            "Success", JOptionPane.PLAIN_MESSAGE);
                     } else {
                         JOptionPane.showMessageDialog(this, 
                             "Failed to release the ghost!", 
