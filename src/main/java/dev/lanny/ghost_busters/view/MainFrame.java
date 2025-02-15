@@ -14,7 +14,6 @@ public class MainFrame extends JFrame {
     private static final int WIDTH = 1200;
     private static final int HEIGHT = 600;
 
-    // Estilos globales
     private static final Color bacgroundColor = new Color(34, 34, 34);
     private static final Color textWhite = Color.WHITE;
     private static final Color buttonBlue = new Color(0, 180, 180);
