@@ -14,7 +14,7 @@ Tu misión será capturar, analizar y, si es necesario, liberar fantasmas atrapa
 - **Filtrar fantasmas por tipo de fantama** para facilitar la investigación.
 - **Salir del programa** para continuar en otra ocasión.
 
-## 🕹️ Interacción con el Usuario a través de una ventana (JFrame))
+## 🕹️ Interacción con el Usuario a través de una ventana (JFrame)
 ```
 ============================================
     👻 ¡Ghostbusters Asturias!
