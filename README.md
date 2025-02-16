@@ -11,48 +11,27 @@ Tu misión será capturar, analizar y, si es necesario, liberar fantasmas atrapa
 - **Capturar fantasmas** y añadirlos a la base de datos.
 - **Visualizar lista de fantasmas capturados**, con sus características.
 - **Liberar fantasmas menos peligrosos** para hacer espacio en el contenedor ectoplásmico.
-- **Filtrar fantasmas por clase** para facilitar la investigación.
-- **Ver fantasmas capturados en un mes específico** para analizar patrones de actividad paranormal.
+- **Filtrar fantasmas por tipo de fantama** para facilitar la investigación.
 - **Salir del programa** para continuar en otra ocasión.
 
-## 🕹️ Interacción con el Usuario (Ejemplo de Consola)
+## 🕹️ Interacción con el Usuario a través de una ventana (JFrame))
 ```
 ============================================
-    ¡Bienvenido a la Base Ghostbusters Asturias!
-    Gestiona tus fantasmas atrapados y protege la región
+    👻 ¡Ghostbusters Asturias!
+   Base de operaciones 👻
 ============================================
-Opciones:
-1. Capturar un nuevo fantasma
-2. Ver lista de fantasmas capturados
-3. Liberar un fantasma
-4. Filtrar fantasmas por clase
-5. Ver fantasmas capturados en un mes
-6. Salir
 
-Por favor, selecciona una opción (1-6):
-> 1
-Capturar un Nuevo Fantasma
-============================================
-Ingresa el nombre del fantasma:
-> Espíritu del Pescador de Lastres
+1. Capturar un nuevo fantasma.
+  Ventana dodemos capturar al fantasma poniendo su nombre, clase, peligro, habilidad que deseemos y filtrar la fecha de su posible captura. Es viable capturar más de un fantasma.
+2. Ver lista de fantasmas capturados.
+  Ventana donde podemos ver la lista previamente capturados.
+3. Liberar un fantasma.
+  Escogemos un único fantasma de la lista y lo liberamos. Podremos volver a capturarlo
+4. Filtrar fantasmas por tipo de fantasma.
+   Queremos filtrar una clase de fantasma según el tipo de fantasma: manifesatción menor, aparición móvil.
+  
+5. Salir
 
-Selecciona la clase del fantasma:
-1. Clase I - Manifestación menor
-2. Clase II - Aparición móvil
-3. Clase III - Entidad inteligente
-4. Clase IV - Fantasma histórico
-5. Clase V - Espíritu antropomorfo
-6. Clase VI - Espíritu demoníaco
-7. Clase VII - Entidad ultraterrena
-> 4
-
-Nivel de peligro (Bajo, Medio, Alto, Crítico):
-> Bajo
-
-Habilidad especial del fantasma:
-> Aparecer durante tormentas en la costa
-
-Fantasma "Espíritu del Pescador de Lastres" capturado exitosamente con nivel de afinidad ectoplásmica 7/10.
 ```
 
 ## 📌 Historias de Usuario
@@ -65,17 +44,14 @@ Fantasma "Espíritu del Pescador de Lastres" capturado exitosamente con nivel de
 ### 🚪 Liberar Fantasmas
 **Como usuario, quiero** liberar fantasmas menos peligrosos o inofensivos **para** hacer espacio en mi contenedor ectoplásmico.
 
-### 🎭 Filtrar Fantasmas por Clase
-**Como usuario, quiero** filtrar los fantasmas por clase **para** priorizar cuáles estudiar o utilizar en mis investigaciones.
-
-### 📅 Ver Fantasmas Capturados en un Mes Específico
-**Como usuario, quiero** obtener un listado de los fantasmas atrapados en un mes **para** estudiar patrones de actividad paranormal en Asturias.
+### 🎭 Filtrar Fantasmas por tipo de fantasma
+**Como usuario, quiero** filtrar los fantasmas por tipo **para** priorizar cuáles estudiar o utilizar en mis investigaciones.
 
 ### 🔚 Salir del Programa
 **Como usuario, quiero** salir del juego **para** guardar mi progreso y continuar en otra ocasión.
 
 ## 🛠️ Tecnologías y Metodología
-- **Lenguaje:** Java
+- **Lenguaje:** Java, GUIs.
 - **Arquitectura:** MVC
 - **Testing:** TDD (Cobertura mínima del 70%)
 - **Control de versiones:** Git & GitHub
@@ -83,29 +59,16 @@ Fantasma "Espíritu del Pescador de Lastres" capturado exitosamente con nivel de
 
 ## 📂 Estructura del Proyecto
 ```
-📦 GhostBusters-Asturias
- ┣ 📂 src
- ┃ ┣ 📂 dev.lanny.controller
- ┃ ┃ ┗ 📜 HunterController.java
- ┃ ┣ 📂 dev.lanny.model
- ┃ ┃ ┣ 📜 GhostModel.java
- ┃ ┃ ┗ 📜 HunterModel.java
- ┃ ┣ 📂 dev.lanny.view
- ┃ ┃ ┣ 📜 MainView.java
- ┃ ┃ ┣ 📜 CaptureGhostView.java
- ┃ ┃ ┗ 📜 DeleteGhostView.java ┃ 
- ┃ ┣ 📂 tests
- ┃ ┣ 📜 GhostModelTests.java
- ┃ ┣ 📜 HunterModelTests.java
- ┃ ┗ 📜 MainViewTests.java
- ┣ 📜 README.md
- ┣ 📜 diagram.png (Diagrama de Clases)
- ┗ 📜 coverage_report.png (Cobertura de Pruebas)
+![Captura de pantalla 2025-02-16 202123](https://github.com/user-attachments/assets/3810bbff-6452-4c40-b8ff-d29eb3f36a5a)
+
 ```
 ## ✅ Entregables
 - 📌 **Repositorio de GitHub:** https://github.com/LannyRivero/GhostBusters.git
-- 📌 **Diagrama de Clases:** _![image](https://github.com/user-attachments/assets/adf6f4d2-9cf6-4653-bfca-e53176a2dd18)_
-- 📌 **Cobertura de Pruebas:** _![image](https://github.com/user-attachments/assets/0e152ced-3ba3-46c5-b5ee-f1b5f0102468)_
+- 📌 **Diagrama de Clases:** ![Captura de pantalla 2025-02-16 184900](https://github.com/user-attachments/assets/c7d3e952-318a-4615-8fbd-bf1cb0a201d6)
+
+- 📌 **Cobertura de Pruebas:** _![Captura de pantalla 2025-02-16 193856](https://github.com/user-attachments/assets/4cec9ea9-8494-4f91-af3b-c932bd249776)
+
+
 
 
 ## 📢 Contribuciones
