@@ -59,11 +59,26 @@ Tu misión será capturar, analizar y, si es necesario, liberar fantasmas atrapa
 
 ## 📂 Estructura del Proyecto
 ```
-![Captura de pantalla 2025-02-16 202123](https://github.com/user-attachments/assets/3810bbff-6452-4c40-b8ff-d29eb3f36a5a)
+ ┣ 📂 src
+ ┃ ┣ 📂 dev.lanny.ghost_busters
+ ┃ ┃ ┗ 📜 App.java
+ ┃ ┣ 📂 dev.lanny.ghost_busters.controller
+ ┃ ┃ ┗ 📜 HunterModel.java
+ ┃ ┣ 📂 dev.lanny.view
+ ┃ ┃ ┣ 📜 MainView.java
+ ┃ ┃ ┣ 📜 CaptureGhostView.java
+ ┃ ┃ ┗ 📜 DeleteGhostView.java
+ ┃ ┣ 📂 tests
+ ┃ ┣ 📜 GhostModelTests.java
+ ┃ ┣ 📜 HunterModelTests.java
+ ┃ ┗ 📜 MainViewTests.java
+ ┣ 📜 README.md
+ ┣ 📜 diagram.png (Diagrama de Clases)
+ ┗ 📜 coverage_report.png (
 
 ```
 ## ✅ Entregables
-- 📌 **Repositorio de GitHub:** https://github.com/LannyRivero/GhostBusters.git
+- 📌 **Repositorio de GitHub:** https://github.com/LannyRivero/GhostBusterUI
 - 📌 **Diagrama de Clases:** ![Captura de pantalla 2025-02-16 184900](https://github.com/user-attachments/assets/c7d3e952-318a-4615-8fbd-bf1cb0a201d6)
 
 - 📌 **Cobertura de Pruebas:** _![Captura de pantalla 2025-02-16 193856](https://github.com/user-attachments/assets/4cec9ea9-8494-4f91-af3b-c932bd249776)
